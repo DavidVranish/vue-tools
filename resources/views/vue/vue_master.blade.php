@@ -85,20 +85,21 @@
 @include('vue.scripts.filters')
 @include('vue.scripts.directives')
 
-@include('vue.components.button_group')
-@include('vue.components.datepicker')
-@include('vue.components.delete')
-@include('vue.components.edit_row')
-@include('vue.components.icheck')
-@include('vue.components.modal')
-@include('vue.components.select2')
-@include('vue.components.show_row')
-@include('vue.components.standard_form')
-@include('vue.components.table_all')
-@include('vue.components.table_pager')
-@include('vue.components.table_searcher')
-@include('vue.components.table_pager')
 
-@include('vue.mixins.table_paging')
-@include('vue.mixins.table_searching')
-@include('vue.mixins.table_sorting')
+@foreach (scandir(base_path('resources/views/vue/components')) as $file)
+    @if ($file !== '.' && $file !== '..')
+        @if (!is_dir($file))
+            @include('vue.components.' . str_replace('.blade.php', '', $file))
+        @else
+            @foreach (scandir(base_path('resources/views/vue/components/' . $file)) as $subFile)
+                @include('vue.components.' . $file . '.' . str_replace('.blade.php', '', $file))
+            @endforeach
+        @endif
+    @endif
+@endforeach
+
+@foreach (scandir(base_path('resources/views/vue/mixins')) as $file)
+    @if ($file !== '.' && $file !== '..')
+        @include('vue.mixins.' . str_replace('.blade.php', '', $file))
+    @endif
+@endforeach
