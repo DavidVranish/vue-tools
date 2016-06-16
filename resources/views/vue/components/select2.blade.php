@@ -1,12 +1,7 @@
 <template id="vue-select2">
-	<div>
-		<select>
-			
-		</select>
-		<div class="options hidden">
-			<slot></slot>
-		</div>
-	</div>
+	<select v-slot style="display: none;">
+		
+	</select>
 </template>
 
 @section('vue_components')
@@ -18,10 +13,12 @@
 			disabled: String
 		},
 		ready: function() {
-			var $select = $(this.$el).find('select');
-			$select.html($(this.$el).find('.options').html());
+			var $select = $(this.$el);
 			var vm = this;
+
 			setTimeout(function() {
+				$select.val(value);
+
 				$select.select2({
 		            width: '100%',
 		            minimumResultsForSearch: 6
@@ -30,12 +27,14 @@
 				$select.on('select2:select', function() {
 					vm.value = $select.val();
 				});
-			}, 50);
-			
+
+				$select.show();
+			}, 1);
+
 		},
 		watch: {
 	    	value: function (val, oldVal) {
-	    		var $select = $(this.$el).find('select');
+	    		var $select = $(this.$el);
 	    		$select.val(this.value);
 	    		$select.trigger('change');
 	      	}

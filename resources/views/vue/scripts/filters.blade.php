@@ -1,20 +1,20 @@
 @section('vue_scripts')
 <script>
-	vueSorts.date = function(field, a, b) {
-		if(typeof(a[field]) == 'undefined'
-			|| a[field] == ''
-			|| a[field] == null) {
+	vueSorts.date = function(a, b) {
+		if(typeof(a) == 'undefined'
+			|| a == ''
+			|| a == null) {
 			a = moment('null');
 		} else {
-			a = moment(a[field]);
+			a = moment(a);
 		}
 
-		if(typeof(b[field]) == 'undefined'
-			|| b[field] == ''
-			|| b[field] == null) {
+		if(typeof(b) == 'undefined'
+			|| b == ''
+			|| b == null) {
 			b = moment('null');
 		} else {
-			b = moment(b[field]);
+			b = moment(b);
 		}
 
 		if(!a.isValid() && !b.isValid()) {
@@ -32,21 +32,21 @@
 		}
 	}
 
-	vueSorts.dateTime = function(field, a, b) {
-		if(typeof(a[field]) == 'undefined'
-			|| a[field] == ''
-			|| a[field] == null) {
+	vueSorts.dateTime = function(a, b) {
+		if(typeof(a) == 'undefined'
+			|| a == ''
+			|| a == null) {
 			a = moment('null');
 		} else {
-			a = moment(a[field]);
+			a = moment(a);
 		}
 
-		if(typeof(b[field]) == 'undefined'
-			|| b[field] == ''
-			|| b[field] == null) {
+		if(typeof(b) == 'undefined'
+			|| b == ''
+			|| b == null) {
 			b = moment('null');
 		} else {
-			b = moment(b[field]);
+			b = moment(b);
 		}
 
 		if(!a.isValid() && !b.isValid()) {
@@ -64,18 +64,18 @@
 		}
 	}
 
-	vueSorts.number = function(field, a, b) {
-		if(a[field] > b[field]) {
+	vueSorts.number = function(a, b) {
+		if((0 + a) > (0 + b)) {
 			return 1;
-		} else if(a[field] < b[field]) {
+		} else if((0 + a) < (0 + b)) {
 			return -1;
 		} else {
 			return 0;
 		}
 	}
 
-	vueSorts.alpha = function(field, a, b) {
-		return a[field].localeCompare(b[field]);
+	vueSorts.alpha = function(a, b) {
+		return ('' + a).localeCompare('' + b);
 	}
 
 	Vue.filter('date', function(date, format) {
@@ -137,6 +137,15 @@
 	    
 	});
 
+	function getObjectField(field, object) {
+		var rtn = object;
+		var keys = field.split('.');
+		for(key in keys) {
+			rtn = rtn[key];
+		}
+		return rtn;
+	}
+
 	Vue.filter('orderMulti', function(array, sortColumns) {
 
 		var tmpArray = array.filter(function() {
@@ -144,8 +153,22 @@
 		});
 
 	    tmpArray.sort(function(a, b) {
+	    	if((typeof(a) == 'undefined' || a == null)
+	    		&& (typeof(b) == 'undefined' || b == null)) {
+	    		return 0;
+			} else if((typeof(a) != 'undefined' && a != null)
+	    		&& (typeof(b) == 'undefined' || b == null)) {
+				return 1;
+			} else if((typeof(a) == 'undefined' || a == null)
+	    		&& (typeof(b) != 'undefined' && b != null)) {
+				return -1;
+			}
+
 	        for(var i = 0; i < sortColumns.length; i++) {
-	            var result = vueSorts[sortColumns[i][2]](sortColumns[i][0], a, b) * sortColumns[i][1];
+	        	var aField = getObjectField(sortColumns[i][0], a);
+	        	var bField = getObjectField(sortColumns[i][0], b);
+
+	            var result = vueSorts[sortColumns[i][2]](aField, bField) * sortColumns[i][1];
 	            if((result) != 0) {
 	                return result;
 	            }

@@ -2,16 +2,21 @@
 <script>
 Vue.directive('slot', {
     bind: function () {
-        var host = this.vm;
-        var root = host.$root;
-        var raw = host.$options._content;
+        var vm = this.vm;
 
-        // TODO: Insert your custom logic to decide what element goes here
-
-        for (var i = 0; i < raw.children.length; i++) {
-            var node = raw.children[i].cloneNode(true);
-            this.el.appendChild(node);
-            root.$compile(node, host, this._scope);
+        var raw;
+        
+        if(this.expression == '') {
+            raw = vm._slotContents.default;
+        } else {
+            raw = vm._slotContents.default.children[this.expression];
+        }
+        if(typeof(raw) != 'undefined') {
+            for (var i = 0; i < raw.children.length; i++) {
+                var node = raw.children[i].cloneNode(true);
+                this.el.appendChild(node);
+                vm.$root.$compile(node, vm, this._scope);
+            }
         }
     }
 });
