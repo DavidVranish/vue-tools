@@ -5,7 +5,7 @@
     var vueMixins = {};
     var vueSorts = {};
 
-    @if(config('app.debug', 'true') == 'true') {
+    @if(config('app.debug', 'true') == 'true')
         Vue.config.debug = true;
     @else
         Vue.config.debug = false;

@@ -105,10 +105,10 @@
 				decimals = {{ config('vue.defaultDecimals', 2) }};
 			}
 			if(typeof(decimalPoint) == 'undefined') {
-				decimalPoint = {{ config('vue.defaultDecimalPoint', '.') }};
+				decimalPoint = '{{ config('vue.defaultDecimalPoint', '.') }}';
 			}
 			if(typeof(thousandsSeperator) == 'undefined') {
-				thousandsSeperator = {{ config('vue.defaultThousandSeparator', ',') }};
+				thousandsSeperator = '{{ config('vue.defaultThousandSeparator', ',') }}';
 			}
 
 			return number_format(number, decimals, decimalPoint, thousandsSeperator);
