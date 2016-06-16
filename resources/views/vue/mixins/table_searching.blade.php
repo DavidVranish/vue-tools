@@ -1,36 +1,37 @@
 @section('vue_mixins')
 <script>
-    vueMixins.tableSearching = function(searchText) {
-        if(typeof(searchText) == 'undefined') {
-            searchText = '';
+    vueMixins.tableSearching = function(search) {
+        if(typeof(search) == 'undefined') {
+            search = '';
         }
         return {
             data: function() {
+                var vm = this;
                 var data = {
-                    searchText: searchText,
                     tableFilters: {
-                        filterBy: function(rows, vm, args) {
-                            return vm
-                                .$options
-                                .filters
-                                .filterBy(rows, args.filterBy.searchText);
+                        search: function(keys, rows, args) {
+                            if(args.search == '') {
+                                return keys;
+                            }
+
+                            return keys.filter(function(key) {
+                                for(var field in args.orderMulti) {
+                                    var cell = getObjectField(args.orderMulti[field].field, rows[key]);
+
+                                    if(contains(cell, args.search.toLowerCase())) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            });
                         }
-                    },
-                    lengthFilters: {
                     },
                     filterArgs: {
-                        filterBy: {
-                            searchText: searchText
-                        }
+                        search: search
                     }
-                }
-                data.lengthFilters.filterBy = data.tableFilters.filterBy;
+                };
+
                 return data;
-            },
-            watch: {
-                searchText: function(val, oldVal) {
-                    this.filterArgs.filterBy.searchText = this.searchText;
-                }
             }
         }
     };

@@ -23,7 +23,6 @@ class ExampleController extends VueController
         $blankExample->updated_at = Carbon::now();
 		$blankExample = new Collection($blankExample->attributesToArray());
 		$blankExample['project'] = $blankProject;
-
 		
 		return view('example.index')
 			->with('examples', $examples)

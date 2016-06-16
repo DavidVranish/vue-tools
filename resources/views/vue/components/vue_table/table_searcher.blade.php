@@ -10,24 +10,13 @@
 <script>
 	vueComponents.tableSearcher = Vue.extend({
 		template: '#vue-table-searcher',
-		props: {
-			searchText: String,
-		},
 		computed: {
 			comSearchText: {
 				get: function() {
-					if(typeof(this.searchText) == 'undefined') {
-						return this.$parent.searchText;
-					} else {
-						return this.searchText;
-					}
+					return this.$parent.filterArgs.search;
 				},
 				set: function(val) {
-					if(typeof(this.searchText) == 'undefined') {
-						this.$parent.searchText = val;
-					} else {
-						this.searchText = val;
-					}
+					this.$parent.filterArgs.search = val;
 				}
 			}
 		}

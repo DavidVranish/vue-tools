@@ -16,28 +16,28 @@
 		 			if(records[recordKeys[i]].data.vue_created == 1) {
 		 				records[recordKeys[i]].data.id = model.storedRecords[recordKeys[i]].data.id;
 		 			}
-		 			records[recordKeys[i]].data.vue_created = false;
-		 			records[recordKeys[i]].data.vue_updated = false;
-		 			records[recordKeys[i]].data.vue_deleted = false;
+		 			model.records[recordKeys[i]].data.vue_created = false;
+		 			model.records[recordKeys[i]].data.vue_updated = false;
+		 			model.records[recordKeys[i]].data.vue_deleted = false;
 		 			model.storedRecords[recordKeys[i]].data.vue_created = false;
 		 			model.storedRecords[recordKeys[i]].data.vue_updated = false;
 		 			model.storedRecords[recordKeys[i]].data.vue_deleted = false;
 		 		} else if(records[recordKeys[i]].type == 'array') {
 		 			if(typeof(model.storedRecords[recordKeys[i]].data) == 'undefined') {
-		 				model.storedRecords[recordKeys[i]].data = [];
+		 				model.storedRecords[recordKeys[i]].data = {};
 		 			}
+		 			var dataKeys = Object.keys(records[recordKeys[i]].data);
 		 			for(var k = 0; k < records[recordKeys[i]].data.length; k++) {
-		 				if(records[recordKeys[i]].data[k].vue_created == 1) {
-			 				records[recordKeys[i]].data[k].id = model.storedRecords[recordKeys[i]].data[k].id;
+		 				if(records[recordKeys[i]].data[dataKeys[k]].vue_created == true) {
+			 				model.records[recordKeys[i]].data[dataKeys[k]].id = model.storedRecords[recordKeys[i]].data[dataKeys[k]].id;
 			 			}
-			 			records[recordKeys[i]].data[k].vue_created = false;
-			 			records[recordKeys[i]].data[k].vue_updated = false;
-			 			model.storedRecords[recordKeys[i]].data[k].vue_created = false;
-			 			model.storedRecords[recordKeys[i]].data[k].vue_updated = false;
+			 			model.records[recordKeys[i]].data[dataKeys[k]].vue_created = false;
+			 			model.records[recordKeys[i]].data[dataKeys[k]].vue_updated = false;
+			 			model.storedRecords[recordKeys[i]].data[dataKeys[k]].vue_created = false;
+			 			model.storedRecords[recordKeys[i]].data[dataKeys[k]].vue_updated = false;
 
-			 			if(records[recordKeys[i]].data[k].vue_deleted == 1) {
-			 				records[recordKeys[i]].data.splice(k, 1);
-			 				k -= 1;
+			 			if(records[recordKeys[i]].data[dataKeys[k]].vue_deleted == true) {
+			 				delete model.records[recordKeys[i]].data[dataKeys[k]];
 			 			}
 		 			}
 		 		}
@@ -62,28 +62,28 @@
 		 			if(records[recordKeys[i]].data.vue_created == 1) {
 		 				records[recordKeys[i]].data = clone(model.storedRecords[recordKeys[i]].data);
 		 			}
-		 			records[recordKeys[i]].data.vue_created = false;
-		 			records[recordKeys[i]].data.vue_updated = false;
-		 			records[recordKeys[i]].data.vue_deleted = false;
+		 			model.records[recordKeys[i]].data.vue_created = false;
+		 			model.records[recordKeys[i]].data.vue_updated = false;
+		 			model.records[recordKeys[i]].data.vue_deleted = false;
 		 			model.storedRecords[recordKeys[i]].data.vue_created = false;
 		 			model.storedRecords[recordKeys[i]].data.vue_updated = false;
 		 			model.storedRecords[recordKeys[i]].data.vue_deleted = false;
 		 		} else if(records[recordKeys[i]].type == 'array') {
 		 			if(typeof(model.storedRecords[recordKeys[i]].data) == 'undefined') {
-		 				model.storedRecords[recordKeys[i]].data = [];
+		 				model.storedRecords[recordKeys[i]].data = {};
 		 			}
-		 			for(var k = 0; k < records[recordKeys[i]].data.length; k++) {
-		 				if(records[recordKeys[i]].data[k].vue_created == 1) {
-		 					records[recordKeys[i]].data[k] = clone(model.storedRecords[recordKeys[i]].data[k]);
+		 			var dataKeys = Object.keys(records[recordKeys[i]].data);
+		 			for(var k = 0; k < dataKeys.length; k++) {
+		 				if(records[recordKeys[i]].data[dataKeys[k]].vue_created == true) {
+		 					model.records[recordKeys[i]].data[dataKeys[k]] = clone(model.storedRecords[recordKeys[i]].data[dataKeys[k]]);
 			 			}
-			 			records[recordKeys[i]].data[k].vue_created = false;
-			 			records[recordKeys[i]].data[k].vue_updated = false;
-			 			model.storedRecords[recordKeys[i]].data[k].vue_created = false;
-			 			model.storedRecords[recordKeys[i]].data[k].vue_updated = false;
+			 			model.records[recordKeys[i]].data[dataKeys[k]].vue_created = false;
+			 			model.records[recordKeys[i]].data[dataKeys[k]].vue_updated = false;
+			 			model.storedRecords[recordKeys[i]].data[dataKeys[k]].vue_created = false;
+			 			model.storedRecords[recordKeys[i]].data[dataKeys[k]].vue_updated = false;
 
-			 			if(records[recordKeys[i]].data[k].vue_deleted == 1) {
-			 				records[recordKeys[i]].data.splice(k, 1);
-			 				k -= 1;
+			 			if(records[recordKeys[i]].data[dataKeys[k]].vue_deleted == 1) {
+			 				delete model.records[recordKeys[i]].data[dataKeys[k]];
 			 			}
 		 			}
 		 		}

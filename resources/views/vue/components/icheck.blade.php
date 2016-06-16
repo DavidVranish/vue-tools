@@ -31,9 +31,9 @@
 			
 			$checkbox.on('ifToggled', function() {
 				if($checkbox.prop('checked')) {
-					vm.value = 1;
+					vm.value = true;
 				} else {
-					vm.value = 0;
+					vm.value = false;
 				}
 			});
 		},

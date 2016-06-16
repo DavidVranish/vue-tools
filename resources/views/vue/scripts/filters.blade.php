@@ -65,9 +65,9 @@
 	}
 
 	vueSorts.number = function(a, b) {
-		if((0 + a) > (0 + b)) {
+		if(a > b) {
 			return 1;
-		} else if((0 + a) < (0 + b)) {
+		} else if(a < b) {
 			return -1;
 		} else {
 			return 0;
@@ -75,7 +75,17 @@
 	}
 
 	vueSorts.alpha = function(a, b) {
-		return ('' + a).localeCompare('' + b);
+		return a.localeCompare(b);
+	}
+
+	vueSorts.boolean = function(a, b) {
+		if(a == true && b == false) {
+			return 1;
+		} else if(a == false && b == true) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 
 	Vue.filter('date', function(date, format) {
@@ -90,7 +100,7 @@
 	    	if(typeof(format) != 'undefined') {
 	    		return filterDate.format(format);	
 	    	} else {
-	    		return filterDate.format("{{ config('vue.defaultDateFormat', 'MM/DD/YY') }}");
+	    		return filterDate.format("{{ config('vue.defaultDateFormat') }}");
 	    	}
 	    } else {
 	        return '';
@@ -105,10 +115,10 @@
 				decimals = {{ config('vue.defaultDecimals', 2) }};
 			}
 			if(typeof(decimalPoint) == 'undefined') {
-				decimalPoint = '{{ config('vue.defaultDecimalPoint', '.') }}';
+				decimalPoint = "{{ config('vue.defaultDecimalPoint', '.') }}";
 			}
 			if(typeof(thousandsSeperator) == 'undefined') {
-				thousandsSeperator = '{{ config('vue.defaultThousandSeparator', ',') }}';
+				thousandsSeperator = "{{ config('vue.defaultThousandSeparator', ',') }}";
 			}
 
 			return number_format(number, decimals, decimalPoint, thousandsSeperator);
@@ -137,45 +147,6 @@
 	    
 	});
 
-	function getObjectField(field, object) {
-		var rtn = object;
-		var keys = field.split('.');
-		for(key in keys) {
-			rtn = rtn[key];
-		}
-		return rtn;
-	}
-
-	Vue.filter('orderMulti', function(array, sortColumns) {
-
-		var tmpArray = array.filter(function() {
-			return true;
-		});
-
-	    tmpArray.sort(function(a, b) {
-	    	if((typeof(a) == 'undefined' || a == null)
-	    		&& (typeof(b) == 'undefined' || b == null)) {
-	    		return 0;
-			} else if((typeof(a) != 'undefined' && a != null)
-	    		&& (typeof(b) == 'undefined' || b == null)) {
-				return 1;
-			} else if((typeof(a) == 'undefined' || a == null)
-	    		&& (typeof(b) != 'undefined' && b != null)) {
-				return -1;
-			}
-
-	        for(var i = 0; i < sortColumns.length; i++) {
-	        	var aField = getObjectField(sortColumns[i][0], a);
-	        	var bField = getObjectField(sortColumns[i][0], b);
-
-	            var result = vueSorts[sortColumns[i][2]](aField, bField) * sortColumns[i][1];
-	            if((result) != 0) {
-	                return result;
-	            }
-	        }
-	        return 0;
-	    });
-	    return tmpArray;
-	});
+	
 </script>
 @append

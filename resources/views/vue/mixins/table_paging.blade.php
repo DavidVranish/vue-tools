@@ -9,15 +9,16 @@
         }
         return {
             data: function() {
+                var vm = this;
                 return {
                     page: page,
                     pageSize: pageSize,
                     tableFilters: {
-                        limitBy: function(rows, vm, args) {
+                        limitBy: function(keys, rows, args) {
                             return vm
                                 .$options
                                 .filters
-                                .limitBy(rows, args.limitBy.pageSize, args.limitBy.offset);
+                                .limitBy(keys, args.limitBy.pageSize, args.limitBy.offset);
                         }
                     },
                     filterArgs: {
